@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates three EC2 instances managed by SSM.  To keep it simple it only works in Sydney (ap-southeast-2).
+
+Resources:
+
+  serverRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+
+  serverRoleInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - !Ref serverRole
+
+  instance1:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.large
+      IamInstanceProfile: !Ref serverRoleInstanceProfile
+      Tags:
+        - 
+          Key: Name
+          Value: server-one
+        - 
+          Key: Environment
+          Value: prod
+
+  instance2:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.large
+      IamInstanceProfile: !Ref serverRoleInstanceProfile
+      Tags:
+        - 
+          Key: Name
+          Value: server-two
+        - 
+          Key: Environment
+          Value: dev
+
+  instance3:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.large
+      IamInstanceProfile: !Ref serverRoleInstanceProfile
+      Tags:
+        - 
+          Key: Name
+          Value: server-three
+        - 
+          Key: Environment
+          Value: dev

@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an EC2 instance and allows you to select the subnet it will use.  To keep it simple it only works in Sydney (ap-southeast-2).
+
+Parameters:
+  serverName:
+    Type: String
+    Default: my-demo-server
+    Description: Enter the name for the server. (This is not a hostname)
+
+  subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select a subnet for this instance.
+
+  key:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Enter a valid EC2 Key
+
+Resources:
+  instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.micro
+      KeyName: !Ref key
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          SubnetId: !Ref subnet
+          AssociatePublicIpAddress: true
+      Tags:
+        - 
+          Key: Name
+          Value: !Ref serverName
+  
