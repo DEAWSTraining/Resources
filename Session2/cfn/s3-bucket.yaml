@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an Simple Storage Service Bucket.  The name of the bucket is shown in the outputs section of the stack.
+
+Resources:
+  myS3Bucket:
+    Type: "AWS::S3::Bucket"
+  
+Outputs:
+  LogicalID:
+    Description: The name of the S3 bucket created in this stack
+    Value: !Ref myS3Bucket
+  

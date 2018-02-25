@@ -5,7 +5,7 @@ Description: This template creates an EC2 instance and allows you to select the 
 Parameters:
   serverName:
     Type: String
-    Default: my-demo-server
+    Default: my-demo-server-
     Description: Enter the name for the server. (This is not a hostname)
 
   subnet:
