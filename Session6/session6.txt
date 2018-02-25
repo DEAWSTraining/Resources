@@ -1,0 +1,58 @@
+- Do you still have your small fleet of servers?
+- If you deleted the stack after the SSM session, now would be a good time to recreate it!
+
+- We're going to start this session off, back in SSM.  
+- Navigate to EC2
+- From the menu on the left hand side select "Run Command"
+- We're going to install the "AWS Inspector" agent on our fleet.
+
+- Select "Run a command"
+- Select "AmazonInspector-ManageAWSAgent"
+- From the "Select instances" dropdown, select all your instances
+- Enter "3" and "1" for "Execute on" and "Stop after"
+
+- For "Operation" ensure that "Install" is selected
+- Scroll down and select "Run", then "View result"
+
+- When the command is a "Success" the Amazon Inspector Agent is installed on the instance.
+
+- Navigate to "Amazon Inspector"
+
+- Select "Get Started"
+
+- You should now see the "Get started with Amazon Inspector" page
+
+- Notice that an IAM role will be created for us called "AWSServiceRoleForAmazonInspector", AWS creates this on our behalf.
+- Select "Next"
+
+- Under "Define an assessment target"
+- Enter a name for the assessment "WindowsDevAssessment"
+
+- Under Tags, select Key "Environment" and Value "dev"
+- Select "Next"
+
+- Under "Define an assessment template"
+- Enter a name of "SecurityScan"
+
+- Expand the "Rules packages" dropdown and review the types of packages that can be run.
+- For now select "Common Vulnerabilities and Exposures-1.1"
+- For "Duration" select "1 Hour (Recommended)"
+- Select "Next" and "Create"
+
+- Now that we have defined an assessment, let's run it
+- Select "SecurityScan" from the list
+- Select "Run"
+
+- Notice that the "Last run" column shows "Collecting data"
+- If you navigate around while the run is collecting data, and want to check on the progress navigate to "Assessment runs" on the left hand side and expand the row entry to see the "Status"
+- Click "Show status" for a detailed report on the scan progress.
+
+- The scan will take some time, so lets come back to this later today.
+
+
+
+
+
+
+
+

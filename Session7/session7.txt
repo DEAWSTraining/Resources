@@ -1,0 +1,65 @@
+- Lets setup a simple Serverless workflow
+- For this workflow we will need a couple of S3 buckets
+
+- Open the AWS console, make sure you are in Sydney, and navigate to S3
+
+- Select Create bucket
+- Enter a bucket name (this must be globally unique) don't use the same name as in the screenshot, and don't use the same as your neighbour!
+- Tip: Enter the name "input-bucket-" then add some sudo random characters by mashing the keyboard.
+- The S3 console page is global, so you need to select a region to create the bucket.  Make sure this is Sydney.
+- Select "Create"
+
+- Repeat this step and create a "output-bucket-xxxxxxxx"
+
+- Make a note of the bucket names.
+
+- Before we create our Lambda function, we need to create a security profile (called an IAM Role) that will give the function all the necessary permissions it needs to run.
+
+- Navigate to IAM (Identity and Access Management)
+- Select "Roles"
+- Select "Create role"
+- Ensure that "AWS Service" is selected, then select "Lambda", and "Next: Permissions"
+- In the policy type search box, type "Lambda", and scroll to "AWSLambdaExecute"
+- SELECT THE CHECKBOX next to the policy name (if you select the policy name itself, you will be sent elsewhere!)
+- Select "Next Review"
+- Enter a name for your role "my-lambda-role"
+- Select "Create role"
+
+- Now lets create our Lambda function
+- Navigate to Lambda
+
+- Select "Create function"
+- Make sure that "Author from scratch" is selected
+- Enter a function name: "my-lambda-function"
+- In the Runtime selection, select "C# (.NET Core 2.0)
+
+- In Role, select "Choose an existing role" and then select in the "Existing role" selection to find "my-lambda-role"
+- Select "Create function"
+
+- You will now be taken to the main Lambda function page.
+- Scroll down and find "Code entry type" where "Upload a .ZIP file" is selected, and below that select "Upload"
+- In the resources supplied with this section, find, select and upload "ImageGrayscaler.zip"
+
+- Enter: "Lambda::Lambda.Function::FunctionHandler" into the Handler text field
+
+- In the "Environment variables" section enter the "Key" of "OutputBucket" and the name of YOUR output bucket "output-bucket-xxxxxx"
+
+- In the "Basic settings" section move the "Memory" slider up to "1024 MB" and the "Timeout" to "30" seconds. 
+
+- Select "Save"
+
+- Scroll back up to the top of the page.  In the "Designer" section, scroll under "Add triggers" until you see "S3" and select it.
+- You should now see a section called "Configure triggers"
+
+- In the "Bucket" selection, find and select YOUR input bucket "input-bucket-xxxxxxx"
+- Under "Event type" select "Object Created (All)"
+- Ensure the "Enable trigger" checkbox is ticked and select "Add" (in the bottom right)
+
+- Select "Save"
+
+
+- Now it's time to test:
+
+- Navigate to S3, and select YOUR 'input-bucket-xxxx'
+- Select 'Upload'
+- Within the resources for this lesson you will find a test image.  But feel free to use an image of your own to upload to the bucket.
