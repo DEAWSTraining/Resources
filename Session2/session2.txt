@@ -1,0 +1,168 @@
+SESSION 2
+
+- Lets create a CloudFormation template
+
+- Open your favorite text editor (VSCode) and create a new YAML file.
+- File new
+- Save as "my-template.yaml"
+
+- Now let's build the template
+
+- First we add the template version:
+
+AWSTemplateFormatVersion: 2010-09-09
+
+- In this simple template we are only going to use the 'Resources' section:
+- In this section we will add an entry for each resource we are going to create. In this case that is one EC2 Instance
+- (As we build the YAML file, look to ensure the tab (spaces) are correct)
+
+Resources:
+  myInstance:
+    Type: "AWS::EC2::Instance"
+
+- The "myInstance" element is used to refer to out instance elsewhere in the template.  That's not of much use in this template, but will be useful in more complex templates later.
+- Notice that we have used an AWS specific Type of "AWS::EC2::Instance".  This is where we set that we are creating an EC2 Instance
+
+- Lets configure the instance with some properties.  Create the following lines, read for some values:
+
+    Properties:
+      ImageId: 
+      InstanceType: 
+      KeyName:  
+
+- Let’s find the Image Id.  When we created the image 'by hand' this was listed during Step 1.
+- While we are creating this template, open a browser tab, in the EC2 Dashboard, and select "Launch instance"
+- In "Step 1" look at the OS/Images, scroll to "Microsoft Windows Server 2016 Base"
+- See the Amazon Machine Image ID (ami-xxxxxxx) written next to the AMI name.
+- Make a note of this value.
+
+- Let's find the InstanceType.
+- Select the AMI in the wizard to see "Step 2"
+- In "Step 2" look at the Type we used.  It was "t2.micro"
+- Make a note of this value.
+
+- Finally lets find the name of a Key Pair we can use.  
+- We created a Key Pair in the first session today.  Let's find its name.
+- Cancel the "Launch Instance" wizard.
+- On the left hand side, scroll down to "Key Pairs"
+- You should have one Key pair name in here.  Make a note of this value. It should be the same name as the PEM file your downloaded in Session 1 (that's another way to find the name)
+
+- Back in the CloudFormation template, enter the values we found into the relevant lines:
+
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.micro
+      KeyName: mykey
+
+- The complete file should now look like something like this:
+
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  myInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.micro
+      KeyName: mykey
+
+- Save your YAML CloudFormation template somewhere on your computer.
+
+- Let's use the template to create a CloudFormation Stack
+
+- Log into the AWS console
+- Set the region to Sydney (stay in this region today, check from time to time)
+- Navigate to CloudFormation
+
+- Select "Create Stack"
+- From the next screen, select "Upload a template to Amazon S3" and click "Browse" and select the CloudFormation template you created earlier in this session.
+- Select "Next"
+- If you are shown a validation error at this point, check that your YAML file looks like the example above.  Are the spaces correct?
+
+- Enter a name for your CloudFormation Stack.  Enter "my-instance".
+- Select "Next"
+
+- The next screen provides some more advanced options for your stack.  For now, scroll to the bottom of this page and select "Next"
+
+- The next page shows a 'Review' or summary page.  Scroll to the bottom of this page and select "Create"
+
+- You should now be taken to the CloudFormation stacks page.  You can watch your stack being created.
+- With your stack selected:
+
+- Click the refresh button (within the page, NOT the main browser refresh button) from time to time, this will update all the information about the stack build.
+
+- Review the "Events" tab, this shows you the steps being taken by the Cloudformation build engine.
+- If there are any errors during the build, they will be shown here.
+
+- Review the "Resources" tab, this shows the resources built in this stack.  In this case you should see just one EC2 Instance.
+
+- When the stack has built, with no errors, you should see the status as "CREATE_COMPLETE"
+
+- Not seeing "CREATE_COMPLETE"?  If the build has failed, see if you can see why from the "Events" tab.  If you need help please ask :)
+
+- With your stack selected, from the "Resources" tab click the "Physical ID" of the instance that the strack created.
+
+- This will take you to the EC2 Instance list.  Note the list of instances is now filtered to just the instance you created (which is your only instance)
+
+- See that the instance does not have a Name tag.  Let's fix that... not in the console, but in the CloudFormation template.
+
+- Back in your text editor, with your CloudFormation YAML file loaded, add a Name tag to your instance.  Under KeyName, and on the same level as KeyName, add:
+
+      Tags:
+        - 
+          Key: Name
+          Value: my-ec2-instance
+
+- Again make sure the spacing is correct, your template should now look something like this:
+
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  myInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-82a458e0
+      InstanceType: t2.micro
+      KeyName: mykey
+      Tags:
+        - 
+          Key: Name
+          Value: my-ec2-instance
+
+- Save your updated template.
+
+- Now, let's update the stack so the changes take effect.
+
+- Log into the AWS console
+- Set the region to Sydney (stay in this region today, check from time to time)
+- Navigate to CloudFormation
+
+- With your stack selected, select "Actions", "Update Stack"
+- From the next screen, select "Upload a template to Amazon S3" and click "Browse" and select your updated CloudFormation template.
+- Select "Next"
+- If you are shown a validation error at this point, check that your YAML file looks like the example above. Are the spaces correct?
+
+- There should be nothing to change on the next screen, select "Next"
+
+- The next screen provides some more advanced options for your stack.  For now, scroll to the bottom of this page and select "Next"
+
+- The next page shows a 'Review' or summary page.  
+- Notice the "Preview your changes" section, this gives you a very high level summary of what will change in the stack.
+- Notice that while the EC2 Instance will be updated, it will not get replaced, so the instance will remain running.
+- Select "Update"
+
+- As before watch CloudFormation do its work, refresh, and review the "Events" tab.
+
+- When the stack status shows as "UPDATE_COMPLETE", follow the link from the "Resources" tab to the instance view.
+- Notice that the instance is now Named.
+
+- If you have time you can connect to the server via RDP if you wish.  When you're finished...
+
+- We don't need this server anymore, let's clean up.
+
+- Cleaning up the CloudFormation stack is super easy, and super clean.  The instance and all related configurations (but not the Key Pair as this wasn't created in the stack) are gone in one action:
+- Navigate to CloudFormation
+- With your stack selected, select "Actions", "Delete Stack"
+- Review the warning and, if you are ready select "Yes, Delete"
+- Monitor as the stack is deleted.
+
+- Want to build the server again, name tag and all?  Just build a new stack with your saved template!
+

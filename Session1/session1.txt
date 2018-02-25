@@ -1,0 +1,82 @@
+- Log into the AWS console using the details provided on your Credential Note
+
+- Set the region to Sydney (stay in this region today, check from time to time)
+
+- Navigate to EC2
+
+
+- Click Launch Instance
+
+- Step 1: Select an Amazon Machine Image (AMI)
+- Select "Microsoft Windows Server 2016 Base"
+
+- Step 2: Choose an Instance Type
+- Select "t2.micro"
+- Select Review and Launch
+
+- Launch
+
+- Popup: "Select an existing key pair or create a new key pair"
+- Select: "Create a new key pair"
+
+- Provide: Type a name, then "Download Key Pair" and keep it safe, we will use this a couple of times today.
+
+- Select: "Launch instances"
+
+- Scroll down and select "View Instances"
+
+- Review the "Instances" page.
+- Review the "Description" tab for the running instance.
+
+- Set the name of the instance, by clicking the pencil in the name column.  Set the name to "my-ec2-instance".
+
+- Look at the "Tags" tab, notice that the name is set as a tag.
+
+- Wait for the "Status Checks" 2/2.  This means that the host and guest OS's are passing status checks.
+
+- Let’s check that the Windows server is up and running:
+
+- With the instance selected, select "Actions", "Instance Settings", "Get System Log"
+
+- You should be able to see system logs sent from the server.
+
+- Notice the Password field is encrypted
+- Is there a line that says: "Message: Windows is Ready to use"?
+
+- With the instance selected, select "Actions", "Instance Settings", "Get Instance Screenshot"
+
+- You should see an image of the screen output of the server. 
+
+- You can't interact with this image, so lets login to the server.
+
+- Lets decrypt the Windows Administrator password:
+
+- With the instance selected, select "Actions", "Get Windows Password"
+- Browse to the key file you downloaded earlier in this section.
+
+- Select "Decrypt Password"
+
+- Keep the details safe somewhere.  This is the only place you will find the password.
+
+- Again with the instance selected, click "Actions" and select "connect"
+
+- Popup: "Connect To Your Instance" select "Download Remote Desktop File"
+
+- This should download, automatically open, and configure a Remote Desktop Protocol client to connect to your instance.
+
+- If clicking the "Download Remote Desktop File" didn't work for you:
+- Open your RDP client, enter the DNS value into the address field
+- When prompted enter the username and password.
+
+- Note: when you connect you may be prompted by security warnings.  This is not a production environment, these warnings are ok.
+
+- Now let's clean up.  We don't need this server anymore:
+
+- With the instance selected, select "Actions", "Instance State", "Terminate"
+
+- Review the warning to make sure you are terminating the right instance, if so, select "Yes, Terminate"
+
+- Note the Key is still in the account (along with some other stuff :( ), but that's ok we will use it later.
+
+
+- Return to the "EC2 Dashboard", you should have 0 (Zero) running instances.
