@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an EC2 web server instance and allows you to select the subnet it will use.  To keep it simple it only works in Sydney (ap-southeast-2).
+
+Parameters:
+  serverName:
+    Type: String
+    Default: my-demo-server
+    Description: Enter the name for the server. (This is not a hostname)
+
+  serverAmi:
+    Type: String
+    Default: ami-5472b036
+    Description: The AMI to build the server from
+
+  subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select a subnet for this instance.
+
+  key:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Enter a valid EC2 Key
+
+  bucket:
+    Type: String
+    Default: auishasdiuhiufhauhfasiuhasd
+    Description: The S3 Bucket to upload images to
+
+Resources:
+  instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: !Ref serverAmi
+      InstanceType: t2.large
+      KeyName: !Ref key
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          SubnetId: !Ref subnet
+          AssociatePublicIpAddress: true
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          setx UPLOAD_BUCKET ${bucket}
+          mkdir c:\inetpub\test
+          Copy-S3Object -BucketName test-aspx -KeyPrefix image-uploader/ -LocalFolder C:\inetpub\test
+          add-windowsfeature web-webserver -includeallsubfeature -logpath $env:temp\webserver_addrole.log
+          new-website -name test -port 80 -physicalpath c:\inetpub\test -ApplicationPool ".NET v4.5" -force
+          remove-website -name "Default Web Site"
+          start-website -name test
+          </powershell>
+      Tags:
+        - 
+          Key: Name
+          Value: !Ref serverName
+      IamInstanceProfile: !Ref instanceProfile
+  
+  instanceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: /
+      RoleName: image-uploader-role
+  
+  instancePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource:
+              - !Sub arn:aws:s3:::${bucket}
+      PolicyName: image-uploader-policy
+      Roles:
+        - !Ref instanceRole
+  
+  instanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      InstanceProfileName: image-uploader-profile
+      Path: /
+      Roles: 
+        - !Ref instanceRole
+  
