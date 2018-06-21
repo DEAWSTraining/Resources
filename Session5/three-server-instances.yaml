@@ -31,7 +31,7 @@ Resources:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: ami-82a458e0
-      InstanceType: t2.large
+      InstanceType: t2.micro
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
         - 
@@ -45,7 +45,7 @@ Resources:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: ami-82a458e0
-      InstanceType: t2.large
+      InstanceType: t2.micro
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
         - 
@@ -59,7 +59,7 @@ Resources:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: ami-82a458e0
-      InstanceType: t2.large
+      InstanceType: t2.micro
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
         - 
