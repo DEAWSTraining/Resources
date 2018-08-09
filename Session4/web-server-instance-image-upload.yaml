@@ -10,7 +10,7 @@ Parameters:
 
   serverAmi:
     Type: String
-    Default: ami-5472b036
+    Default: ami-d48623b6
     Description: The AMI to build the server from
 
   subnet:
@@ -34,7 +34,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref key
       NetworkInterfaces:
-        - DeviceIndex: 0
+        - DeviceIndex: '0'
           SubnetId: !Ref subnet
           AssociatePublicIpAddress: true
       UserData:

@@ -20,11 +20,11 @@ Resources:
   instance:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: ami-82a458e0
+      ImageId: ami-d48623b6
       InstanceType: t2.micro
       KeyName: !Ref key
       NetworkInterfaces:
-        - DeviceIndex: 0
+        - DeviceIndex: '0'
           SubnetId: !Ref subnet
           AssociatePublicIpAddress: true
       Tags:

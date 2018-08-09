@@ -1,8 +1,0 @@
-<powershell>
-mkdir c:\inetpub\test
-curl https://s3-ap-southeast-2.amazonaws.com/test-aspx/default.aspx -OutFile C:\inetpub\test\default.aspx
-add-windowsfeature web-webserver -includeallsubfeature -logpath $env:temp\webserver_addrole.log
-new-website -name test -port 80 -physicalpath c:\inetpub\test -ApplicationPool ".NET v4.5" -force
-remove-website -name "Default Web Site"
-start-website -name test
-</powershell>
