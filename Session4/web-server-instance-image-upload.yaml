@@ -31,7 +31,7 @@ Resources:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: !Ref serverAmi
-      InstanceType: t2.micro
+      InstanceType: t2.large
       KeyName: !Ref key
       NetworkInterfaces:
         - DeviceIndex: '0'
