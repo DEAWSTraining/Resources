@@ -30,7 +30,7 @@ Resources:
   instance1:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: ami-d48623b6
+      ImageId: ami-0096a7a7add65af89
       InstanceType: t2.medium
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
@@ -44,7 +44,7 @@ Resources:
   instance2:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: ami-d48623b6
+      ImageId: ami-0096a7a7add65af89
       InstanceType: t2.medium
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
@@ -58,7 +58,7 @@ Resources:
   instance3:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: ami-d48623b6
+      ImageId: ami-0096a7a7add65af89
       InstanceType: t2.medium
       IamInstanceProfile: !Ref serverRoleInstanceProfile
       Tags:
