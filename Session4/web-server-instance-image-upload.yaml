@@ -10,7 +10,7 @@ Parameters:
 
   serverAmi:
     Type: String
-    Default: ami-d48623b6
+    Default: ami-0096a7a7add65af89
     Description: The AMI to build the server from
 
   subnet:
